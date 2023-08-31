@@ -25,12 +25,21 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
     });
   }
 
+  void _removeItem(GroceryItem groceryItem) {
+    setState(() {
+      _groceryItems.remove(groceryItem);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget screenContent = const EmptyScreenContent();
 
     if (_groceryItems.isNotEmpty) {
-      screenContent = GroceryList(groceryItems: _groceryItems);
+      screenContent = GroceryList(
+        groceryItems: _groceryItems,
+        onRemoveItem: _removeItem,
+      );
     }
 
     return Scaffold(
