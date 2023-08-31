@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/features/new_item/utils/validators.dart';
 import 'package:shopping_list/features/new_item/widgets/categories_dropdown.dart';
+import 'package:shopping_list/models/category.dart';
 
-class NewItemForm extends StatelessWidget {
-  NewItemForm({super.key});
+class NewItemForm extends StatefulWidget {
+  const NewItemForm({super.key});
 
+  @override
+  State<NewItemForm> createState() => _NewItemFormState();
+}
+
+class _NewItemFormState extends State<NewItemForm> {
   final _formKey = GlobalKey<FormState>();
+
+  String _enteredName = "";
+
+  String _enteredQuantity = "1";
+
+  Category _enteredCategory = categories[Categories.vegetables]!;
 
   void _resetForm() {
     _formKey.currentState!.reset();
   }
 
   void _saveItem() {
-    _formKey.currentState!.validate();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print(_enteredName);
+      print(_enteredQuantity);
+      print(_enteredCategory);
+    }
   }
 
   @override
@@ -33,6 +51,9 @@ class NewItemForm extends StatelessWidget {
 
               return null;
             },
+            onSaved: (value) {
+              _enteredName = value!;
+            },
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -42,7 +63,7 @@ class NewItemForm extends StatelessWidget {
                   decoration: const InputDecoration(
                     label: Text('Quantity'),
                   ),
-                  initialValue: '1',
+                  initialValue: _enteredQuantity,
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (isValueNotEmptyAndPositiveNumber(value)) {
@@ -51,12 +72,18 @@ class NewItemForm extends StatelessWidget {
 
                     return null;
                   },
+                  onSaved: (value) {
+                    _enteredQuantity = value!;
+                  },
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: CategoriesDropdown(
-                  onChanged: (value) {},
+                  value: _enteredCategory,
+                  onChanged: (value) {
+                    _enteredCategory = value!;
+                  },
                 ),
               )
             ],

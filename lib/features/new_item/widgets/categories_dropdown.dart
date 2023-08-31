@@ -4,9 +4,14 @@ import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/category.dart';
 
 class CategoriesDropdown extends StatelessWidget {
-  const CategoriesDropdown({super.key, required this.onChanged});
+  const CategoriesDropdown({
+    super.key,
+    required this.onChanged,
+    required this.value,
+  });
 
   final void Function(Category?)? onChanged;
+  final Category value;
 
   @override
   Widget build(BuildContext context) {
