@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/features/new_item/widgets/new_item_form.dart';
 
 class NewItemScreen extends StatefulWidget {
   const NewItemScreen({super.key});
@@ -18,7 +19,7 @@ class _NewItemScreen extends State<NewItemScreen> {
       ),
       body: const Padding(
         padding: EdgeInsets.all(12),
-        child: Text('form'),
+        child: NewItemForm(),
       ),
     );
   }
