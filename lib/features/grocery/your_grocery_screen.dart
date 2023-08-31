@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/features/grocery/widgets/empty_screen_content.dart';
 import 'package:shopping_list/features/grocery/widgets/grocery_list.dart';
 import 'package:shopping_list/features/new_item/new_item_screen.dart';
 import 'package:shopping_list/models/grocery_item.dart';
@@ -26,6 +27,12 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Widget screenContent = const EmptyScreenContent();
+
+    if (_groceryItems.isNotEmpty) {
+      screenContent = GroceryList(groceryItems: _groceryItems);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Grocery'),
@@ -36,7 +43,7 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
           )
         ],
       ),
-      body: GroceryList(groceryItems: _groceryItems),
+      body: screenContent,
     );
   }
 }
