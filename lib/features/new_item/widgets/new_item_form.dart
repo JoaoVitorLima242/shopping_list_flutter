@@ -3,6 +3,7 @@ import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/features/new_item/utils/validators.dart';
 import 'package:shopping_list/features/new_item/widgets/categories_dropdown.dart';
 import 'package:shopping_list/models/category.dart';
+import 'package:shopping_list/models/grocery_item.dart';
 
 class NewItemForm extends StatefulWidget {
   const NewItemForm({super.key});
@@ -15,21 +16,23 @@ class _NewItemFormState extends State<NewItemForm> {
   final _formKey = GlobalKey<FormState>();
 
   String _enteredName = "";
-
-  String _enteredQuantity = "1";
-
+  int _enteredQuantity = 1;
   Category _enteredCategory = categories[Categories.vegetables]!;
 
   void _resetForm() {
     _formKey.currentState!.reset();
   }
 
-  void _saveItem() {
+  void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredName);
-      print(_enteredQuantity);
-      print(_enteredCategory);
+      Navigator.of(context).pop(
+        GroceryItem(
+            id: DateTime.now().toString(),
+            name: _enteredName,
+            quantity: _enteredQuantity,
+            category: _enteredCategory),
+      );
     }
   }
 
@@ -63,7 +66,7 @@ class _NewItemFormState extends State<NewItemForm> {
                   decoration: const InputDecoration(
                     label: Text('Quantity'),
                   ),
-                  initialValue: _enteredQuantity,
+                  initialValue: _enteredQuantity.toString(),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (isValueNotEmptyAndPositiveNumber(value)) {
@@ -73,7 +76,7 @@ class _NewItemFormState extends State<NewItemForm> {
                     return null;
                   },
                   onSaved: (value) {
-                    _enteredQuantity = value!;
+                    _enteredQuantity = int.parse(value!);
                   },
                 ),
               ),
