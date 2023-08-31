@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/common_widgets/colored_circle.dart';
 import 'package:shopping_list/models/grocery_item.dart';
 
 class GroceryTile extends StatelessWidget {
@@ -9,12 +10,7 @@ class GroceryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(groceryItem.name),
-      leading: Container(
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-            color: groceryItem.category.color, shape: BoxShape.circle),
-      ),
+      leading: ColoredCircle(groceryItem.category.color),
       trailing: Text(groceryItem.quantity.toString()),
     );
   }
