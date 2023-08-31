@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/common_widgets/colored_circle.dart';
-import 'package:shopping_list/data/categories.dart';
+import 'package:shopping_list/features/new_item/widgets/categories_dropdown.dart';
 
 class NewItemForm extends StatelessWidget {
   const NewItemForm({super.key});
@@ -54,22 +53,7 @@ class NewItemForm extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: DropdownButtonFormField(
-                  items: [
-                    for (final category in categories.entries)
-                      DropdownMenuItem(
-                        value: category.value,
-                        child: Row(
-                          children: [
-                            ColoredCircle(category.value.color),
-                            const SizedBox(
-                              width: 6,
-                            ),
-                            Text(category.value.title)
-                          ],
-                        ),
-                      )
-                  ],
+                child: CategoriesDropdown(
                   onChanged: (value) {},
                 ),
               )
