@@ -17,8 +17,8 @@ class _NewItemScreen extends State<NewItemScreen> {
       appBar: AppBar(
         title: const Text('Add a new item'),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(12),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
         child: NewItemForm(),
       ),
     );

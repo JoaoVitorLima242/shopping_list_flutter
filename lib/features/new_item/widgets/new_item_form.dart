@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/features/new_item/utils/validators.dart';
 import 'package:shopping_list/features/new_item/widgets/categories_dropdown.dart';
 
 class NewItemForm extends StatelessWidget {
-  const NewItemForm({super.key});
+  NewItemForm({super.key});
 
-  bool _isValueNotEmpty(String? value) {
-    return (value == null || value.isEmpty || value.trim().length <= 1);
+  final _formKey = GlobalKey<FormState>();
+
+  void _resetForm() {
+    _formKey.currentState!.reset();
   }
 
-  bool _isValueNotEmptyAndPositiveNumber(String? value) {
-    return (value == null ||
-        value.isEmpty ||
-        int.tryParse(value) == null ||
-        int.tryParse(value)! <= 1);
+  void _saveItem() {
+    _formKey.currentState!.validate();
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           TextFormField(
@@ -26,7 +27,7 @@ class NewItemForm extends StatelessWidget {
               label: Text('Name'),
             ),
             validator: (value) {
-              if (_isValueNotEmpty(value)) {
+              if (isValueNotEmpty(value)) {
                 return "Must be between 1 and 50 characters.";
               }
 
@@ -42,8 +43,9 @@ class NewItemForm extends StatelessWidget {
                     label: Text('Quantity'),
                   ),
                   initialValue: '1',
+                  keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (_isValueNotEmptyAndPositiveNumber(value)) {
+                    if (isValueNotEmptyAndPositiveNumber(value)) {
                       return "Must be a valid, and positive number.";
                     }
 
@@ -64,11 +66,11 @@ class NewItemForm extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: _resetForm,
                 child: const Text('Reset'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _saveItem,
                 child: const Text('Add item'),
               )
             ],
