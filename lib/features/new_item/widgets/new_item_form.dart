@@ -35,7 +35,7 @@ class _NewItemFormState extends State<NewItemForm> {
         'shopping-list.json',
       );
 
-      http.post(
+      final response = await http.post(
         url,
         headers: {
           'Content-type': 'application/json',
@@ -49,14 +49,14 @@ class _NewItemFormState extends State<NewItemForm> {
         ),
       );
 
-      // Navigator.of(context).pop(
-      //   GroceryItem(
-      //     id: DateTime.now().toString(),
-      //     name: _enteredName,
-      //     quantity: _enteredQuantity,
-      //     category: _enteredCategory,
-      //   ),
-      // );
+      print(response.statusCode);
+      print(response.body);
+
+      if (!context.mounted) {
+        return;
+      }
+
+      Navigator.of(context).pop();
     }
   }
 
