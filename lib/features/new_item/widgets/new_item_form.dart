@@ -6,6 +6,7 @@ import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/features/new_item/utils/validators.dart';
 import 'package:shopping_list/features/new_item/widgets/categories_dropdown.dart';
 import 'package:shopping_list/models/category.dart';
+import 'package:shopping_list/models/grocery_item.dart';
 
 class NewItemForm extends StatefulWidget {
   const NewItemForm({super.key});
@@ -35,14 +36,18 @@ class _NewItemFormState extends State<NewItemForm> {
         _enteredCategory.title,
       );
 
-      print(response.statusCode);
-      print(response.body);
+      final String id = json.decode(response.body)['name'];
 
       if (!context.mounted) {
         return;
       }
 
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(GroceryItem(
+        id: id,
+        category: _enteredCategory,
+        name: _enteredName,
+        quantity: _enteredQuantity,
+      ));
     }
   }
 
