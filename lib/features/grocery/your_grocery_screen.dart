@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/api/grocery_items_api.dart';
+import 'package:shopping_list/features/grocery/widgets/error_delete_dialog.dart';
 import 'package:shopping_list/features/grocery/widgets/text_screen_content.dart';
 import 'package:shopping_list/features/grocery/widgets/grocery_list.dart';
 import 'package:shopping_list/features/new_item/new_item_screen.dart';
@@ -54,10 +55,28 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
     });
   }
 
-  void _removeItem(GroceryItem groceryItem) {
+  void _removeItem(GroceryItem groceryItem) async {
+    final index = _groceryItems.indexOf(groceryItem);
+
     setState(() {
       _groceryItems.remove(groceryItem);
     });
+
+    final respose =
+        await GroceryItemApi().deleteGroceryItemRequest(groceryItem.id);
+
+    if (respose.statusCode >= 400) {
+      setState(() {
+        _groceryItems.insert(index, groceryItem);
+      });
+
+      if (context.mounted) {
+        showAdaptiveDialog(
+          context: context,
+          builder: (ctx) => const ErrorDialog(),
+        );
+      }
+    }
   }
 
   @override

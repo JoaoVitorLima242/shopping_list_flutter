@@ -65,4 +65,14 @@ class GroceryItemApi {
       rethrow;
     }
   }
+
+  Future<http.Response> deleteGroceryItemRequest(String itemId) async {
+    final deleteUrl = Uri.https(
+      'shopping-list-flutter-a2db5-default-rtdb.firebaseio.com',
+      'shopping-list/$itemId.json',
+    );
+    return http.delete(
+      deleteUrl,
+    );
+  }
 }
