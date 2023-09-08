@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shopping_list/api/grocery_items_api.dart';
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/features/new_item/utils/validators.dart';
 import 'package:shopping_list/features/new_item/widgets/categories_dropdown.dart';
 import 'package:shopping_list/models/category.dart';
-
-import 'package:http/http.dart' as http;
 
 class NewItemForm extends StatefulWidget {
   const NewItemForm({super.key});
@@ -30,23 +29,10 @@ class _NewItemFormState extends State<NewItemForm> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      final url = Uri.https(
-        'shopping-list-flutter-a2db5-default-rtdb.firebaseio.com',
-        'shopping-list.json',
-      );
-
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: json.encode(
-          {
-            'name': _enteredName,
-            'quantity': _enteredQuantity,
-            'category': _enteredCategory.title,
-          },
-        ),
+      final response = await GroceryItemApi().createGroceryItemRequest(
+        _enteredName,
+        _enteredQuantity,
+        _enteredCategory.title,
       );
 
       print(response.statusCode);
