@@ -33,25 +33,36 @@ class GroceryItemApi {
   }
 
   Future<List<GroceryItem>> getGroceryItemsRequest() async {
-    final response = await http.get(_url);
-    final Map<String, dynamic> listData = json.decode(response.body);
-    final List<GroceryItem> loadedItems = [];
+    try {
+      final response = await http.get(_url);
 
-    for (final item in listData.entries) {
-      final category = categories.entries
-          .firstWhere(
-            (element) => element.value.title == item.value['category'],
-          )
-          .value;
+      switch (response.statusCode) {
+        case 200:
+          final Map<String, dynamic> listData = json.decode(response.body);
+          final List<GroceryItem> loadedItems = [];
 
-      loadedItems.add(GroceryItem(
-        id: item.key,
-        name: item.value['name'],
-        quantity: item.value['quantity'],
-        category: category,
-      ));
+          for (final item in listData.entries) {
+            final category = categories.entries
+                .firstWhere(
+                  (element) => element.value.title == item.value['category'],
+                )
+                .value;
+
+            loadedItems.add(GroceryItem(
+              id: item.key,
+              name: item.value['name'],
+              quantity: item.value['quantity'],
+              category: category,
+            ));
+          }
+
+          return loadedItems;
+        default:
+          throw Exception(response.reasonPhrase);
+      }
+    } on Exception catch (_) {
+      // make it explicit that this function can throw exceptions
+      rethrow;
     }
-
-    return loadedItems;
   }
 }

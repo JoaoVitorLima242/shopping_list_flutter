@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class EmptyScreenContent extends StatelessWidget {
-  const EmptyScreenContent({super.key});
+class TextScreenContent extends StatelessWidget {
+  const TextScreenContent(this.text, {super.key});
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'No items added yet.',
+        text,
         style: Theme.of(context).textTheme.titleMedium,
       ),
     );

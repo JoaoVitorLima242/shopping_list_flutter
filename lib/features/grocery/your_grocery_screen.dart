@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/api/grocery_items_api.dart';
-import 'package:shopping_list/features/grocery/widgets/empty_screen_content.dart';
+import 'package:shopping_list/features/grocery/widgets/text_screen_content.dart';
 import 'package:shopping_list/features/grocery/widgets/grocery_list.dart';
 import 'package:shopping_list/features/new_item/new_item_screen.dart';
 import 'package:shopping_list/models/grocery_item.dart';
-
-import 'package:http/http.dart' as http;
 
 class YourGroceryScreen extends StatefulWidget {
   const YourGroceryScreen({super.key});
@@ -17,6 +15,7 @@ class YourGroceryScreen extends StatefulWidget {
 class _YourGroceryScreenState extends State<YourGroceryScreen> {
   List<GroceryItem> _groceryItems = [];
   bool _isLoading = true;
+  String? _error;
 
   @override
   void initState() {
@@ -25,12 +24,20 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
   }
 
   void _loadItems() async {
-    final loadedItems = await GroceryItemApi().getGroceryItemsRequest();
+    try {
+      final loadedItems = await GroceryItemApi().getGroceryItemsRequest();
 
-    setState(() {
-      _groceryItems = loadedItems;
-      _isLoading = false;
-    });
+      setState(() {
+        _groceryItems = loadedItems;
+        _isLoading = false;
+        _error = '';
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _error = 'Failed to fetch data. Please try again later';
+      });
+    }
   }
 
   void _goToNewItemScreen() async {
@@ -55,7 +62,11 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget screenContent = const EmptyScreenContent();
+    Widget screenContent = const TextScreenContent('No items added yet.');
+
+    if (_error != null) {
+      screenContent = TextScreenContent(_error!);
+    }
 
     if (_isLoading) {
       screenContent = const Center(child: CircularProgressIndicator());
