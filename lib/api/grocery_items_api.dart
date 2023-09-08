@@ -38,6 +38,10 @@ class GroceryItemApi {
 
       switch (response.statusCode) {
         case 200:
+          if (response.body == 'null') {
+            return [];
+          }
+
           final Map<String, dynamic> listData = json.decode(response.body);
           final List<GroceryItem> loadedItems = [];
 

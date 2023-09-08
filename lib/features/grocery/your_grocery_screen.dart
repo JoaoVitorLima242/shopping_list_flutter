@@ -16,7 +16,7 @@ class YourGroceryScreen extends StatefulWidget {
 class _YourGroceryScreenState extends State<YourGroceryScreen> {
   List<GroceryItem> _groceryItems = [];
   bool _isLoading = true;
-  String? _error;
+  String _error = '';
 
   @override
   void initState() {
@@ -83,8 +83,8 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
   Widget build(BuildContext context) {
     Widget screenContent = const TextScreenContent('No items added yet.');
 
-    if (_error != null) {
-      screenContent = TextScreenContent(_error!);
+    if (_error.isNotEmpty) {
+      screenContent = TextScreenContent(_error);
     }
 
     if (_isLoading) {
