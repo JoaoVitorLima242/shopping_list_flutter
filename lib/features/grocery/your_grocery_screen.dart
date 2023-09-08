@@ -16,6 +16,7 @@ class YourGroceryScreen extends StatefulWidget {
 
 class _YourGroceryScreenState extends State<YourGroceryScreen> {
   List<GroceryItem> _groceryItems = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
 
     setState(() {
       _groceryItems = loadedItems;
+      _isLoading = false;
     });
   }
 
@@ -54,6 +56,10 @@ class _YourGroceryScreenState extends State<YourGroceryScreen> {
   @override
   Widget build(BuildContext context) {
     Widget screenContent = const EmptyScreenContent();
+
+    if (_isLoading) {
+      screenContent = const Center(child: CircularProgressIndicator());
+    }
 
     if (_groceryItems.isNotEmpty) {
       screenContent = GroceryList(

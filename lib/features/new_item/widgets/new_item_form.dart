@@ -21,6 +21,7 @@ class _NewItemFormState extends State<NewItemForm> {
   String _enteredName = "";
   int _enteredQuantity = 1;
   Category _enteredCategory = categories[Categories.vegetables]!;
+  bool _isSending = false;
 
   void _resetForm() {
     _formKey.currentState!.reset();
@@ -29,6 +30,10 @@ class _NewItemFormState extends State<NewItemForm> {
   void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      setState(() {
+        _isSending = true;
+      });
 
       final response = await GroceryItemApi().createGroceryItemRequest(
         _enteredName,
@@ -111,12 +116,18 @@ class _NewItemFormState extends State<NewItemForm> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed: _resetForm,
+                onPressed: _isSending ? null : _resetForm,
                 child: const Text('Reset'),
               ),
               ElevatedButton(
-                onPressed: _saveItem,
-                child: const Text('Add item'),
+                onPressed: _isSending ? null : _saveItem,
+                child: _isSending
+                    ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(),
+                      )
+                    : const Text('Add item'),
               )
             ],
           ),
